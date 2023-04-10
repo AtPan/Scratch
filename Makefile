@@ -1,54 +1,53 @@
 # File Constants ---------------------
+TARGET := os.bin
 SRC := ./src
 BIN := ./bin
-TARGET := $(BIN)/image.iso
 
-BOOT_SECTOR := $(SRC)/boot
-STDLIB := $(SRC)/lib
-KERNEL := $(SRC)/kernel
+BOOT := $(SRC)/boot/boot.asm
+BOOT_BIN := $(BOOT:%.asm=%.bin)
 
-# File Wildcards ---------------------
+KERNEL_ENTRY := $(SRC)/kernel/kernel_entry.elf
+KERNEL_ENTRY_OBJ := $(KERNEL_ENTRY:%.elf=%.o)
 
-BOOT_SECTOR_SRC := $(wildcard $(BOOT_SECTOR)/*.asm)
-STDLIB_SRC := $(wildcard $(STDLIB)/*/*.c)
-KERNEL_SRC := $(wildcard $(KERNEL)/*/*.c)
+C_SRC := $(wildcard $(SRC)/*/*.c)
+C_OBJ := $(C_SRC:%.c=%.o)
 
-BOOT_SECTOR_OBJ := ${BOOT_SECTOR_SRC:%.asm=%.o}
-STDLIB_OBJ := ${STDLIB_SRC:%.c=%.o}
-KERNEL_OBJ := ${KERNEL_SRC:%.c=%.o}
+OBJ := $(KERNEL_ENTRY_OBJ) $(C_OBJ)
 
 # Compiler Constants -----------------
-
 CC := gcc
-fCC := -m32 -O2 -ffreestanding -Wall -Wextra -I ./include/ -nostdlib
+fCC := -I./include -m32 -fno-pie -ffreestanding -c
 
 AS := nasm
-fAS :=
+fAS := -f bin
 
 LD := ld
-fLD :=
 
 EMU := qemu-system-i386
-fEMU := -m 4G -fda
+fEMU := -m 4G
 
-# Build Wildcards -------------------
-
+# Build Rules -------------------
 .PHONY: all clean
 
+all: $(TARGET)
+	$(EMU) $(fEMU) -drive format=raw,file=$<,index=0,if=floppy
+
+$(TARGET): boot.bin kernel.bin
+	cat $^ > $@
+	@mv $^ $(BIN)
+
+boot.bin: $(BOOT)
+	$(AS) -f bin -o $@ $^
+
+kernel.bin: $(OBJ)
+	$(LD) -m elf_i386 -s -o $@ -Ttext 0x1000 $^ --oformat binary
+
+%.o: %.elf
+	$(AS) -f elf -o $@ $^
+
+%.o: %.c
+	$(CC) $(fCC) -o $@ $^
+
 clean:
-	@for obj_file in $(BOOT_SECTOR_OBJ) ; do \
-		if [ -f $$obj_file ] ; then \
-			rm $$obj_file ; \
-		fi; \
-	done;
-	@for obj_file in $(STDLIB_OBJ) ; do \
-		if [ -f $$obj_file ] ; then \
-			rm $$obj_file ; \
-		fi; \
-	done;
-	@for obj_file in $(KERNEL_OBJ) ; do \
-		if [ -f $$obj_file ] ; then \
-			rm $$obj_file ; \
-		fi; \
-	done;
-	@rm $(BIN)/*
+	@rm -f $(BIN)/*
+	@rm -f $(OBJ) $(TARGET)
