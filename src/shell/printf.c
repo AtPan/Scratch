@@ -26,10 +26,14 @@ void printf(const char * fmt, ...) {
             case 's':
                 print_string(va_next(args, const char *));
                 break;
+            case 'X':
+            case 'x':
+                print_hex(va_next(args, int), c == 'X');
+                break;
             default:
                 __Scratch_print_character_color(c, DEFAULT_ATTR);
         }
     }
 
-    update_cursor(__Scratch_get_terminal_position());
+    update_cursor();
 }

@@ -8,5 +8,5 @@ void clear_screen() {
     }
 
     __Scratch_set_terminal_position(0);
-    update_cursor(__Scratch_get_terminal_position());
+    update_cursor();
 }

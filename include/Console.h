@@ -11,12 +11,14 @@
 #define print_string(str) print_string_color((const char *)str, DEFAULT_ATTR)
 #define print_line(str) print_line_color((const char *)str, DEFAULT_ATTR)
 #define print_int(i) print_int_color((int)i, DEFAULT_ATTR)
+#define print_hex(a, b) print_hex_color((unsigned int)a, (int)b, DEFAULT_ATTR)
 
 void clear_screen(void);
 void print_character_color(char character, unsigned char attribute);
 void print_string_color(const char * str, unsigned char attribute);
 void print_line_color(const char * str, unsigned char attribute);
 void print_int_color(int i, unsigned char attribute);
+void print_hex_color(unsigned int a, int lower, unsigned char attribute);
 
 void printf(const char * fmt, ...);
 

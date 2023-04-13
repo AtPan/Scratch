@@ -6,6 +6,6 @@
 
 unsigned char scan(void);
 uint16_t get_cursor_position(void);
-void update_cursor(uint16_t position);
+void update_cursor(void);
 
 #endif

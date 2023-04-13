@@ -1,4 +1,5 @@
 #include <Keyboard.h>
+#include <Console.h>
 #include <Ports.h>
 
 unsigned char scan(void) {
@@ -24,7 +25,8 @@ unsigned char scan(void) {
         return 0;
 }
 
-void update_cursor(uint16_t position) {
+void update_cursor() {
+    unsigned short position = __Scratch_get_terminal_position();
     position >>= 1;
 
     outb(0x3D4, 0x0f);

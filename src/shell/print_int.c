@@ -22,5 +22,5 @@ void print_int_color(int i, unsigned char attribute) {
             __Scratch_print_character_color(buf[i], attribute);
         }
     }
-    update_cursor(__Scratch_get_terminal_position());
+    update_cursor();
 }
