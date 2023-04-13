@@ -1,4 +1,5 @@
 #include <Console.h>
+#include <Keyboard.h>
 
 static unsigned short terminal_position = 0;
 
@@ -11,6 +12,11 @@ unsigned short __Scratch_get_terminal_position() {
 }
 
 void print_character_color(char c, unsigned char a) {
+    __Scratch_print_character_color(c, a);
+    update_cursor(terminal_position);
+}
+
+void __Scratch_print_character_color(char c, unsigned char a) {
     switch (c) {
         case '\n':
             terminal_position += 160 - (terminal_position % 160);

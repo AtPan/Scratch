@@ -1,10 +1,5 @@
 #include <Keyboard.h>
-
-unsigned char inb(unsigned short int port) {
-    unsigned char ret;
-    __asm__ __volatile__("inb %1, %0" : "=a"(ret) : "Nd"(port));
-    return ret;
-}
+#include <Ports.h>
 
 unsigned char scan(void) {
     /*
@@ -27,4 +22,26 @@ unsigned char scan(void) {
         return key = scan;
     else
         return 0;
+}
+
+void update_cursor(uint16_t position) {
+    position >>= 1;
+
+    outb(0x3D4, 0x0f);
+    outb(0x3D5, (uint8_t)(position));
+
+    outb(0x3D4, 0x0e);
+    outb(0x3D5, (uint8_t)(position >> 8));
+}
+
+uint16_t get_cursor_position() {
+    uint16_t pos = 0;
+
+    outb(0x3D4, 0x0f);
+    pos |= inb(0x3D5);
+
+    outb(0x3D4, 0x0e);
+    pos |= (((uint16_t)inb(0x3D5)) << 8);
+
+    return pos;
 }
