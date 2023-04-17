@@ -26,11 +26,10 @@ unsigned char scan(void) {
 }
 
 void update_cursor() {
-    unsigned short position = __Scratch_get_terminal_position();
-    position >>= 1;
+    unsigned short position = __Scratch_get_terminal_position() >> 1;
 
     outb(0x3D4, 0x0f);
-    outb(0x3D5, (uint8_t)(position));
+    outb(0x3D5, (uint8_t)(position & 0xff));
 
     outb(0x3D4, 0x0e);
     outb(0x3D5, (uint8_t)(position >> 8));
