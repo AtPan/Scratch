@@ -20,6 +20,9 @@ void printf(const char * fmt, ...) {
             case 'c':
                 __Scratch_print_character_color(va_next(args, char), DEFAULT_ATTR);
                 break;
+            case 'u':
+                print_uint(va_next(args, unsigned int));
+                break;
             case 'd':
                 print_int(va_next(args, int));
                 break;
