@@ -2,6 +2,15 @@
 #include <Keyboard.h>
 
 static unsigned short terminal_position = 0;
+static unsigned char active_attribute = 0x07;
+
+unsigned char Scratch_get_active_attribute() {
+    return active_attribute;
+}
+
+void Scratch_set_active_attribute(unsigned char a) {
+    active_attribute = a;
+}
 
 void __Scratch_set_terminal_position(unsigned short pos) {
     terminal_position = pos;
@@ -23,6 +32,15 @@ void __Scratch_print_character_color(char c, unsigned char a) {
             break;
         case '\t':
             terminal_position += 8 - (terminal_position % 8);
+            break;
+        case '\b':
+            if(VGA_MEMORY[terminal_position - 2] == 0) {
+                for(int i = 0; i < 4 && terminal_position >= 2 && VGA_MEMORY[terminal_position - 2] == 0; terminal_position -= 2, i++);
+            }
+            else {
+                terminal_position -= 2;
+                VGA_MEMORY[terminal_position] = 0;
+            }
             break;
         default:
             VGA_MEMORY[terminal_position] = c;
