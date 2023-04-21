@@ -5,7 +5,7 @@
 kernel_load:
     pusha
 
-    mov al, 20
+    mov al, 50
     mov bx, KERNEL_OFFSET
     mov ch, 0
     mov cl, 2
