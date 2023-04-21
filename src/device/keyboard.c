@@ -3,14 +3,6 @@
 #include <Ports.h>
 
 unsigned char scan(void) {
-    /*
-    static unsigned char key = 0;
-    unsigned char c = inb(0x60);
-
-    if(c & 0x80) return key = 0;
-    else if (c != key) return key = c;
-    else return 0;
-    */
     unsigned char brk;
     static unsigned char key = 0;
     unsigned char scan = inb(0x60);
