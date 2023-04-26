@@ -26,6 +26,10 @@ void print_character_color(char c, unsigned char a) {
 }
 
 void __Scratch_print_character_color(char c, unsigned char a) {
+    if(terminal_position >= VGA_WIDTH * VGA_HEIGHT * 2) {
+        shift_screen_up();
+    }
+
     switch (c) {
         case '\n':
             terminal_position += 160 - (terminal_position % 160);

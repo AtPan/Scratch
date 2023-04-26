@@ -26,6 +26,8 @@ void print_hex_color(unsigned int a, int lower, unsigned char attribute);
 
 void printf(const char * fmt, ...);
 
+void shift_screen_up(void);
+
 void __Scratch_print_character_color(char c, unsigned char a);
 void __Scratch_set_terminal_position(unsigned short new_terminal_position);
 unsigned short __Scratch_get_terminal_position(void);
