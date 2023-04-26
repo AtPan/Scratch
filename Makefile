@@ -44,6 +44,9 @@ $(TARGET): boot.bin kernel.bin
 	@dd if=/dev/zero of=$@ bs=512 count=2880
 	@dd if=boot.bin of=$@ bs=512 conv=notrunc
 	@dd if=kernel.bin of=$@ bs=512 seek=1 conv=notrunc
+	@if [ ! -d $(BIN) ]; then \
+		mkdir $(BIN); \
+	fi
 	@mv $^ $(BIN)
 
 boot.bin: $(BOOT)
